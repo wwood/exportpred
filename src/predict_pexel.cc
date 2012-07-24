@@ -29,6 +29,15 @@
 #include <GHMM/string_funcs.hh>
 
 #include <getopt.h>
+#include <algorithm>
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
+#include <iterator>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <string.h>
 
 #define BLOCK_SIZE 1024
 

@@ -26,6 +26,8 @@
 
 #include <string>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
 
 namespace string {
   static inline std::string strip(const std::string &s) {

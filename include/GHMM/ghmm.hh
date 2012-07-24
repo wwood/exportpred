@@ -35,6 +35,7 @@
 #include <string>
 #include <numeric>
 #include <iostream>
+#include <stdio.h>
 
 namespace GHMM {
   class Parse;

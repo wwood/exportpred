@@ -26,6 +26,7 @@
 #include <stdlib.h>
 
 #include <numeric>
+#include <algorithm>
 
 namespace MATH {
   const static double LOG_ZERO = -__builtin_inf(); // -1e15;
