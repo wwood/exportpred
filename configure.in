@@ -1,0 +1,139 @@
+AC_INIT(README)
+AC_CONFIG_AUX_DIR(config)
+AC_SUBST(ac_aux_dir)
+AM_CONFIG_HEADER(include/GHMM/config.h)
+
+EXPORTPRED_MAJOR_VERSION=1
+EXPORTPRED_MINOR_VERSION=0
+EXPORTPRED_MICRO_VERSION=0
+EXPORTPRED_VERSION=$EXPORTPRED_MAJOR_VERSION.$EXPORTPRED_MINOR_VERSION.$EXPORTPRED_MICRO_VERSION
+AC_SUBST(EXPORTPRED_MAJOR_VERSION)
+AC_SUBST(EXPORTPRED_MINOR_VERSION)
+AC_SUBST(EXPORTPRED_MICRO_VERSION)
+AC_SUBST(EXPORTPRED_VERSION)
+
+AM_INIT_AUTOMAKE(exportpred, $EXPORTPRED_VERSION)
+
+AC_PROG_CC
+AC_PROG_CPP
+AM_PROG_LIBTOOL
+AC_PROG_CXX
+
+AM_MAINTAINER_MODE
+
+AC_HEADER_STDC
+AC_CHECK_HEADERS(stdint.h)
+AC_CHECK_HEADERS(unistd.h)
+AC_CHECK_HEADERS(netinet/in.h)
+AC_CHECK_HEADERS(endian.h)
+AC_CHECK_HEADERS(byteswap.h)
+AC_CHECK_HEADERS(sys/signal.h)
+AC_CHECK_HEADERS(sys/stat.h)
+AC_CHECK_HEADERS(sys/int_limits.h)
+AC_CHECK_HEADERS(sys/int_types.h)
+AC_CHECK_HEADERS(netinet/in.h)
+AC_CHECK_HEADERS(sys/mman.h)
+
+AC_FUNC_MMAP
+
+AC_C_CONST
+AC_C_INLINE
+AC_C_BIGENDIAN
+AC_TYPE_SIZE_T
+
+AC_LANG_CPLUSPLUS
+AC_CHECK_HEADERS(limits)
+
+AC_CHECK_SIZEOF(char)
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(long)
+AC_CHECK_SIZEOF(long long)
+AC_CHECK_SIZEOF(size_t)
+AC_CHECK_SIZEOF(void *)
+
+# AC_CHECK_PROG(PCRE_CONFIG, pcre-config, pcre-config)
+# AC_ARG_WITH(pcre, [  --with-pcre-config=PATH    Location of PCRE pcre-config (auto)], pcre_config="$withval", pcre_config="")
+# 
+# if test "X$pcre_config" != "X" ; then
+#   AC_MSG_CHECKING(for $pcre_config)
+# 
+#   if test -f $pcre_config ; then
+#     PCRE_CONFIG=$pcre_config
+#     AC_MSG_RESULT(yes)
+#   else
+#     AC_MSG_RESULT(no - searching PATH)
+#   fi
+# fi
+# 
+# if test "X$PCRE_CONFIG" = "X"; then
+#   AC_CHECK_PROGS(PCRE_CONFIG, pcre-config)
+# fi
+# 
+# if test "X$PCRE_CONFIG" = "X"; then
+#   AC_ERROR([pcre is required])
+# fi
+# 
+# # $PCRE_CONFIG --version
+# 
+# PCRE_CGLAGS=`$PCRE_CONFIG --cflags`
+# PCRE_LIBS=`$PCRE_CONFIG --libs`
+ 
+AC_DEFINE([NEED_FIXED_SIZE_TYPES], [], [Explicitly define fixed size types.])
+AC_DEFINE([int64_t_support],       [], [The int64_t type is supported.])
+AC_MSG_CHECKING([for fixed size types])
+AC_TRY_COMPILE(
+  [
+#if HAVE_STDINT_H
+#include <stdint.h>
+#endif
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#if HAVE_SYS_INT_TYPES_H
+#include <sys/int_types.h>
+#endif
+  ],[
+int32_t x
+  ],[
+    AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING([for int64_t])
+    AC_TRY_COMPILE(
+  [
+#if HAVE_STDINT_H
+#include <stdint.h>
+#endif
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#if HAVE_SYS_INT_TYPES_H
+#include <sys/int_types.h>
+#endif
+  ],[
+int64_t x
+  ],[
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(int64_t_support)
+  ],[
+    AC_MSG_RESULT([no])
+  ])
+  ],[
+    AC_MSG_RESULT([not in the standard places, will define them])
+    AC_DEFINE(NEED_FIXED_SIZE_TYPES)
+  ])
+
+CFLAGS="${CFLAGS} -I\$(top_srcdir)/include"
+CXXFLAGS="${CXXFLAGS} -I\$(top_srcdir)/include"
+
+AC_SUBST(PCRE_CFLAGS)
+AC_SUBST(PCRE_LIBS)
+
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+
+AC_OUTPUT([
+Makefile
+include/Makefile
+lib/Makefile
+src/Makefile
+])
